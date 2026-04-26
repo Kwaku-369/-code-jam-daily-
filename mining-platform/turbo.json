@@ -1,0 +1,25 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalEnv": [
+    "NODE_ENV",
+    "JWT_SECRET",
+    "TOTP_ISSUER",
+    "DATABASE_URL",
+    "DATABRICKS_HOST",
+    "DATABRICKS_TOKEN",
+    "DATABRICKS_WAREHOUSE_ID",
+    "AI_PROVIDER",
+    "ANTHROPIC_API_KEY",
+    "NGC_API_KEY",
+    "CLOUDFLARE_ACCOUNT_ID",
+    "CLOUDFLARE_API_TOKEN"
+  ],
+  "tasks": {
+    "build":     { "dependsOn": ["^build"], "outputs": ["dist/**", ".wrangler/**"] },
+    "dev":       { "cache": false, "persistent": true },
+    "test":      { "dependsOn": ["^build"], "outputs": ["coverage/**"] },
+    "deploy":    { "dependsOn": ["build"] },
+    "lint":      { "outputs": [] },
+    "typecheck": { "dependsOn": ["^build"], "outputs": [] }
+  }
+}

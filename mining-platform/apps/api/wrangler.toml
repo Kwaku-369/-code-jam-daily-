@@ -1,0 +1,72 @@
+name            = "mining-platform-api"
+main            = "src/index.ts"
+compatibility_date = "2024-12-30"
+compatibility_flags = ["nodejs_compat"]
+
+# ---- D1 database (SQLite on Cloudflare edge) ----------------------------
+[[d1_databases]]
+binding      = "DB"
+database_name= "mining-platform-db"
+database_id  = "REPLACE_WITH_D1_DATABASE_ID"
+
+# ---- KV namespaces -------------------------------------------------------
+[[kv_namespaces]]
+binding = "SESSIONS"
+id      = "REPLACE_WITH_KV_ID"
+
+[[kv_namespaces]]
+binding = "RATE_LIMIT"
+id      = "REPLACE_WITH_KV_RATE_LIMIT_ID"
+
+[[kv_namespaces]]
+binding = "CACHE"
+id      = "REPLACE_WITH_KV_CACHE_ID"
+
+# ---- Queues (async AI briefing, notifications) ---------------------------
+[[queues.producers]]
+binding   = "AI_QUEUE"
+queue     = "mining-ai-jobs"
+
+[[queues.consumers]]
+queue            = "mining-ai-jobs"
+max_batch_size   = 10
+max_batch_timeout = 30
+
+# ---- Secrets (set via `wrangler secret put`) ----------------------------
+# Core auth
+# JWT_SECRET
+# TOTP_ISSUER
+#
+# AI
+# ANTHROPIC_API_KEY
+#
+# MTN Mobile Money
+# MTN_MOMO_SUBSCRIPTION_KEY_COLLECTION
+# MTN_MOMO_SUBSCRIPTION_KEY_DISBURSEMENT
+# MTN_MOMO_API_USER
+# MTN_MOMO_API_KEY
+# MTN_MOMO_ENV          (sandbox | production)
+#
+# Paystack (Mastercard + card payments)
+# PAYSTACK_SECRET_KEY
+# WEBHOOK_SECRET_PAYSTACK
+#
+# Platform config
+# PLATFORM_FEE_PCT      (e.g. 10 for 10%)
+#
+# Databricks
+# DATABRICKS_HOST
+# DATABRICKS_TOKEN
+# DATABRICKS_WAREHOUSE_ID
+
+# ---- Environment overrides -----------------------------------------------
+[env.staging]
+name = "mining-platform-api-staging"
+
+[env.production]
+name    = "mining-platform-api-production"
+routes  = [{ pattern = "api.miningplatform.app/*", zone_name = "miningplatform.app" }]
+
+# ---- Observability -------------------------------------------------------
+[observability.logs]
+enabled = true
