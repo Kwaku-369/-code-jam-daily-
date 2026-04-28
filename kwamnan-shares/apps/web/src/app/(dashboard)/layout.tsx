@@ -9,6 +9,7 @@ import {
 } from 'lucide-react'
 import { useAuthStore, useUIStore } from '@/lib/store'
 import { notificationsApi } from '@/lib/api'
+import { FeedbackWidget } from '@/components/feedback/FeedbackWidget'
 
 const NAV_ITEMS = [
   { href: '/dashboard', label: 'Overview', icon: LayoutDashboard },
@@ -138,6 +139,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           {children}
         </motion.div>
       </main>
+
+      {/* Multilingual feedback widget — visible on all dashboard pages */}
+      <FeedbackWidget />
     </div>
   )
 }

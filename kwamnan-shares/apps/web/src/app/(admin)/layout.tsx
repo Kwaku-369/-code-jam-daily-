@@ -13,6 +13,7 @@ const ADMIN_NAV = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/admin/approve', label: 'Pending Approvals', icon: Clock, badge: true },
   { href: '/admin/investors', label: 'Investors', icon: Users },
+  { href: '/admin/staff', label: 'Staff Roles', icon: Shield },
   { href: '/admin/duplicates', label: 'Duplicate Flags', icon: Copy },
   { href: '/admin/security', label: 'Security Events', icon: AlertTriangle },
   { href: '/admin/reports', label: 'Reports', icon: FileText },
@@ -26,12 +27,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   useEffect(() => {
     if (!isAuthenticated) { router.push('/login'); return }
-    if (!['admin', 'bank_staff', 'auditor'].includes(user?.role || '')) {
+    if (!['admin', 'bank_staff', 'auditor', 'inputer', 'authorizer'].includes(user?.role || '')) {
       router.push('/dashboard')
     }
   }, [isAuthenticated, user, router])
 
-  if (!isAuthenticated || !['admin', 'bank_staff', 'auditor'].includes(user?.role || '')) return null
+  if (!isAuthenticated || !['admin', 'bank_staff', 'auditor', 'inputer', 'authorizer'].includes(user?.role || '')) return null
 
   return (
     <div className="min-h-screen bg-gray-950 flex">
