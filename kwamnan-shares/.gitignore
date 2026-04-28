@@ -1,0 +1,17 @@
+node_modules
+.next
+.wrangler
+dist
+build
+.env
+.env.local
+.env.production
+.env.*.local
+*.pyc
+__pycache__
+.venv
+venv
+.DS_Store
+.turbo
+*.log
+.vercel
