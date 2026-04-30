@@ -1,7 +1,7 @@
 import { Hono } from 'hono'
 import { createClient } from '@supabase/supabase-js'
 import { Env } from '../index'
-import { requireRole } from '../middleware/auth'
+import { requireRole, AnySupabase } from '../middleware/auth'
 import { generateShareCertificate } from '../services/certificates'
 
 const admin = new Hono<{ Bindings: Env }>()
@@ -280,9 +280,9 @@ admin.post('/generate-certificate/:holdingId', async (c) => {
 
 // Internal: Generate and store certificate PDF
 async function generateAndStoreCertificate(
-  supabase: ReturnType<typeof createClient>,
+  supabase: AnySupabase,
   env: Env,
-  txnOrHolding: Record<string, unknown>
+  txnOrHolding: Record<string, any>
 ) {
   try {
     const investor = txnOrHolding.profiles as Record<string, unknown>

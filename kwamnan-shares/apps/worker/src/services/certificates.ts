@@ -174,7 +174,13 @@ export async function generateShareCertificate(data: CertificateData): Promise<U
   page.drawRectangle({ x: b+6, y: b+6, width: width - b*2-12, height: height - b*2-12, borderColor: COLORS.gold, borderWidth: 1.5 })
 
   // ── Corner ornaments ──────────────────────────────────────
-  [[b+2,b+2],[width-b-22,b+2],[b+2,height-b-22],[width-b-22,height-b-22]].forEach(([cx,cy]) => {
+  const cornerPositions: [number, number][] = [
+    [b+2, b+2],
+    [width-b-22, b+2],
+    [b+2, height-b-22],
+    [width-b-22, height-b-22],
+  ]
+  cornerPositions.forEach(([cx, cy]) => {
     page.drawRectangle({ x: cx, y: cy, width: 20, height: 20, color: COLORS.gold, opacity: 0.6 })
   })
 

@@ -140,7 +140,7 @@ export type ShareClass = {
 export type Holding = {
   id: string; share_class_id: string; total_units: number; total_amount_invested: number;
   current_value: number; unrealized_pnl: number; certificate_number: string;
-  certificate_url?: string; share_classes: ShareClass;
+  certificate_url?: string; average_cost_per_unit?: number; share_classes: ShareClass;
 }
 export type Transaction = {
   id: string; reference: string; units: number; price_per_unit: number;
@@ -168,7 +168,9 @@ export type AdminDashboard = {
 }
 export type ApprovalItem = {
   id: string; resource_type: string; resource_id: string; status: string;
-  first_approved_at?: string; requested_at: string; data: Record<string, unknown>;
+  first_approved_at?: string; second_approved_at?: string;
+  first_approval_notes?: string; second_approval_notes?: string;
+  requested_at: string; data: Record<string, unknown>;
   share_transactions: Transaction & { profiles: UserProfile; share_classes: ShareClass };
 }
 export type DuplicateFlag = {
