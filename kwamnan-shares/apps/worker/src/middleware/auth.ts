@@ -1,5 +1,5 @@
 import { MiddlewareHandler } from 'hono'
-import { createClient } from '@supabase/supabase-js'
+import { createClient, SupabaseClient } from '@supabase/supabase-js'
 import { Env } from '../index'
 
 export type AuthUser = {
@@ -9,10 +9,14 @@ export type AuthUser = {
   investor_id: string | null
 }
 
+// Untyped Supabase client — table types are not generated at build time;
+// callers cast row shapes as needed.
+export type AnySupabase = SupabaseClient<any, any, any>
+
 declare module 'hono' {
   interface ContextVariableMap {
     user: AuthUser
-    supabase: ReturnType<typeof createClient>
+    supabase: AnySupabase
   }
 }
 
@@ -28,7 +32,7 @@ export const authMiddleware: MiddlewareHandler<{ Bindings: Env }> = async (c, ne
   }
 
   const token = authHeader.slice(7)
-  const supabase = createClient(c.env.SUPABASE_URL, c.env.SUPABASE_SERVICE_ROLE_KEY)
+  const supabase = createClient(c.env.SUPABASE_URL, c.env.SUPABASE_SERVICE_ROLE_KEY) as AnySupabase
 
   const { data: { user }, error } = await supabase.auth.getUser(token)
   if (error || !user) return c.json({ error: 'Invalid or expired token' }, 401)

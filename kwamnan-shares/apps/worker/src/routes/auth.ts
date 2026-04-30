@@ -171,7 +171,7 @@ auth.post('/verify-totp', async (c) => {
   // Mark TOTP as enabled
   await supabase.from('profiles').update({ totp_enabled: true }).eq('id', user.id)
 
-  return c.json({ success: true, session: data.session })
+  return c.json({ success: true, mfa: data })
 })
 
 // POST /api/auth/challenge-totp — Create TOTP challenge (step 2 of login)

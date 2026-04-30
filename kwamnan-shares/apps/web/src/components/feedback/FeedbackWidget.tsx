@@ -161,7 +161,7 @@ export function FeedbackWidget() {
   const [sent, setSent] = useState(false)
   const [recording, setRecording] = useState(false)
   const [voiceUsed, setVoiceUsed] = useState(false)
-  const recognitionRef = useRef<SpeechRecognition | null>(null)
+  const recognitionRef = useRef<any>(null)
   const t = LANGUAGES[lang].strings
 
   // Detect browser language on mount and set closest match
@@ -175,10 +175,8 @@ export function FeedbackWidget() {
   }, [])
 
   const startVoice = useCallback(() => {
-    const SpeechRecognition =
-      (window as unknown as { SpeechRecognition?: typeof globalThis.SpeechRecognition; webkitSpeechRecognition?: typeof globalThis.SpeechRecognition })
-        .SpeechRecognition ??
-      (window as unknown as { webkitSpeechRecognition?: typeof globalThis.SpeechRecognition }).webkitSpeechRecognition
+    const w = window as any
+    const SpeechRecognition = w.SpeechRecognition ?? w.webkitSpeechRecognition
 
     if (!SpeechRecognition) {
       toast.error('Voice input not supported in this browser.')
@@ -190,9 +188,9 @@ export function FeedbackWidget() {
     recognition.continuous = false
     recognition.interimResults = true
 
-    recognition.onresult = (e) => {
-      const transcript = Array.from(e.results)
-        .map((r) => r[0].transcript)
+    recognition.onresult = (e: any) => {
+      const transcript = Array.from(e.results as ArrayLike<any>)
+        .map((r: any) => r[0].transcript)
         .join('')
       setMessage(transcript)
     }

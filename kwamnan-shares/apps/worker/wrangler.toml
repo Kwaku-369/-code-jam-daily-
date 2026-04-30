@@ -10,13 +10,13 @@ FRONTEND_URL = "https://kwamnan-shares.pages.dev"
 # KV namespace for rate limiting and sessions
 [[kv_namespaces]]
 binding = "RATE_LIMIT_KV"
-id = "REPLACE_WITH_YOUR_KV_ID"
-preview_id = "REPLACE_WITH_YOUR_KV_PREVIEW_ID"
+id = "d2265731417746f89b9a45d91536d322"
+preview_id = "c4afb491cc414528b050e8ad656941e0"
 
 [[kv_namespaces]]
 binding = "SESSION_KV"
-id = "REPLACE_WITH_YOUR_SESSION_KV_ID"
-preview_id = "REPLACE_WITH_YOUR_SESSION_KV_PREVIEW_ID"
+id = "df193485717c486c9e56aa3ebf3a39ef"
+preview_id = "5bce01eda5b740e08550dd1c2384f29e"
 
 # Secrets (set via: wrangler secret put VARIABLE_NAME)
 # SUPABASE_URL
