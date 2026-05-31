@@ -1,0 +1,9 @@
+{
+  "name": "@mining/domain",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/entities.ts",
+  "exports": { ".": "./src/entities.ts" },
+  "dependencies": { "@mining/shared": "*" }
+}

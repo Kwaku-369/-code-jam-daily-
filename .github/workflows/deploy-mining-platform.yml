@@ -1,0 +1,67 @@
+name: Deploy Mining Platform API
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "mining-platform/**"
+  pull_request:
+    branches: [main]
+    paths:
+      - "mining-platform/**"
+
+jobs:
+  # ── Type-check ──────────────────────────────────────────────────────────────
+  typecheck:
+    name: Type Check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: mining-platform
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: mining-platform/package-lock.json
+      - run: npm install
+      - run: npm run typecheck --workspace=apps/api
+
+  # ── Deploy to Cloudflare Workers ────────────────────────────────────────────
+  deploy:
+    name: Deploy to Cloudflare
+    needs: typecheck
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    defaults:
+      run:
+        working-directory: mining-platform/apps/api
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: mining-platform/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          cd ../../
+          npm install
+
+      - name: Deploy API to Cloudflare Workers
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: mining-platform/apps/api
+          command: deploy
+
+      - name: Run DB migrations
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: mining-platform/apps/api
+          command: d1 execute mining-platform-db --file=src/db/schema.sql --remote
